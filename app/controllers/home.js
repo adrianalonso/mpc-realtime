@@ -8,6 +8,6 @@ module.exports = function (app) {
 router.get('/', function (req, res, next) {
 
     res.render('index', {
-      title: 'MPC Realtime'
+      title: 'MPC Realtime Project - adrianalonso.es'
     });
 });

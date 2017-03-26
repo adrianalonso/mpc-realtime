@@ -1,13 +1,7 @@
-/**
- * SoundManager 2: MPC (Drum Machine) demo
- */
-
 var MPC = function () {
   var self = this;
   var socket = null;
   this.idPrefix = 'btn-'; // HTML ID prefix
-  this.statusWidth = 6;
-  this.progressWidth = 256;
   this.keys = {
     '1': 0,
     '2': 1,
@@ -27,21 +21,14 @@ var MPC = function () {
     'v': 15
   }
 
-  // scope within these event handler methods: "this" = SMSound() object instance (see SMSound() in soundmanager.js for reference)
-
   this.showProgress = function () {
-    // sound is loading, update bytes received using this.bytesLoaded / this.bytesTotal
-    // if (self._getButton(this.id).className != 'loading') self._getButton(this.id).className = 'loading'; // a bit inefficient here..
-    // self._showStatus(this.id, this.bytesLoaded, this.bytesTotal);
   };
 
   this.onload = function () {
     var sID = this.id;
-
   };
 
   this.onfinish = function () {
-
   };
 
   this.onplay = function () {
@@ -53,7 +40,6 @@ var MPC = function () {
   };
 
   this.whileplaying = function () {
-    //self._showStatus(this.id, this.position, this.duration);
   };
 
   this._keyHandler = function (e) {
@@ -61,13 +47,6 @@ var MPC = function () {
     var sChar = String.fromCharCode(oEvt.keyCode).toLowerCase();
     if (typeof self.keys[sChar] != 'undefined')
       self.clickMpcButton(self.keys[sChar]);
-
-  };
-
-  this._showStatus = function (sID, n1, n2) {
-    // var o = self._getButton(sID).getElementsByTagName('div')[0];
-    // var offX = (n2 > 0 ? (-self.progressWidth + parseInt((n1 / n2) * o.offsetWidth)) : -self.progressWidth);
-    // o.style.backgroundPosition = offX + 'px 0px';
   };
 
   this._getButton = function (sID) {
@@ -76,22 +55,30 @@ var MPC = function () {
 
   this._reset = function (sID) {
     var id = sID;
-    //self._showStatus(sID, 1, 1);
-    //setTimeout(function () {
-    //  self._showStatus(sID, 0, 0);
-    // }, 200);
   };
+
 
   this.init = function () {
     document.onkeydown = self._keyHandler;
     self.socket = io.connect('http://localhost:3000');
 
     self.socket.on('sound.play', self._socketSoundPlayHandler);
+    self.socket.on('user.connected', self._updateUsers);
+    self.socket.on('user.disconnected', self._updateUsers);
+
+    $('span').mousedown(function (e) {
+      e.preventDefault();
+    });
+
 
   };
 
   this._socketSoundPlayHandler = function (msg) {
     self.playButton(msg);
+  };
+
+  this._updateUsers = function (msg) {
+     $('.js-users-connected').html(msg);
   };
 
   this.clickMpcButton = function (button) {
@@ -122,7 +109,6 @@ soundManager.setup({
   html5PollingInterval: 50,
   ignoreMobileRestrictions: true,
   onready: function () {
-
     soundManager.setup({
       defaultOptions: {
         autoLoad: true,
@@ -136,18 +122,17 @@ soundManager.setup({
       }
     });
 
-    // This is the "onload" equivalent which is called when SoundManager has been initialised (sounds can be created, etc.)
     mpc.init();
 
-
-    for (var i = 0; i < 16; i++) {
+    for (var i = 0; i < 12; i++) {
       soundManager.createSound({
         id: 's' + i,
         url: 'audio/s' + i + '.mp3'
       });
     }
 
-
   }
 });
+
+
 

@@ -5,17 +5,22 @@ var app = express();
 var server = require('http').createServer(app);
 var io = require('socket.io')(server);
 
-
+var allClients = [];
 io.on('connection', function(socket){
-  console.log('a user connected');
-  socket.on('disconnect', function(){
-    console.log('user disconnected');
-  });
+  allClients.push(socket);
+  socket.broadcast.emit('user.connected', allClients.length);
+  socket.emit('user.connected', allClients.length);
 
   socket.on('button.pressed', function(msg){
-    console.log('button pressed: ' + msg);
     socket.broadcast.emit('sound.play', msg);
-    console.log("BROADCAST");
+  });
+
+  socket.on('disconnect', function() {
+
+    var i = allClients.indexOf(socket);
+    allClients.splice(i, 1);
+    socket.broadcast.emit('user.disconnected', allClients.length);
+
   });
 
 });

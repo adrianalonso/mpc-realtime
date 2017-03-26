@@ -1,12 +1,13 @@
 extends layout
 
 block content
+  a.github-fork-ribbon(href="https://github.com/adrianalonso/mpc-realtime" target="_blank" title="Fork me on GitHub") Github
 
   div#mpc-container
-    h1 MPC Realtime
+    h1 MPC Project
     ul#mpc.clearfix
       span.deco1
-      h2 Test Realtime MPC
+      h2  MPC REALTIME 2017
       li#s0.mpc-button(onclick='mpc.clickMpcButton(0)')
         span 1
       li#s1.mpc-button(onclick='mpc.clickMpcButton(1)')
@@ -31,3 +32,4 @@ block content
         span d
       li#s11.mpc-button(onclick='mpc.clickMpcButton(11)')
         span f
+    p.users-connected <span class="js-users-connected">0</span> users connected
